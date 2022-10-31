@@ -1,12 +1,26 @@
 import express from 'express';
 import router from './router';
+import morgan from 'morgan'
+import cors from 'cors'
+import { protect } from './modules/auth';
+import { createNewUser, signin } from './handlers/user';
 
 const app=express();
+
+// 
+
+app.use(morgan('dev'))
+app.use(express.json()) //allows a cllient to send a json 
+app.use(express.urlencoded({extended:true}))
+app.use(cors()) //Browser middleware
 
 app.get('/',(req,res)=>{
     console.log('hellow from express');
     res.status(200).json({ message:'hellow '})
 })
-app.use('/api',router)
+
+app.use('/api',protect,router)
+app.post('/user',createNewUser)
+app.post('/signin',signin)
 
 export default app

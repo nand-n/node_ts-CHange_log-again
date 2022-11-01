@@ -1,7 +1,7 @@
 import {Router} from 'express';
 import { body,oneOf,validationResult } from 'express-validator';
 import prisma from './db';
-import { createProduct, getOneProduct, getProducts } from './handlers/product';
+import { createProduct, deleteProduct, getOneProduct, getProducts } from './handlers/product';
 import { handleInputErrors } from './modules/middleware';
 
 const router = Router();
@@ -9,36 +9,35 @@ const router = Router();
 router.get('/product',getProducts)
 
 router.get('/product/:id',getOneProduct)
+
 // router.put('/product:id', body('name').isString() ,handleInputErrors)
 
 
 router.post('/product',body('name').isString(),handleInputErrors,createProduct)
-router.post('/product/:id',(req,res)=>{
+
+router.post('/product/:id',(req,res)=>{})
+
+router.delete('/product/:id',deleteProduct)
+
+// Update 
+router.get('/update',(req,res) =>{
 
 })
-router.delete('/product/:id',()=>{
+router.get('/update:id',
+body('title').optional(),
+body('body').optional(),
+body('status').isIn(['IN_PROGRESS','SHIPED','DEPERCATED']),
+body('version').optional(),
+    ()=>{
 
 })
 
-//Update 
-// router.get('/update',(req,res) =>{
+router.post('/update',
+body('title').exists().isString(),
+body('body').exists().isString(),
+()=>{
 
-// })
-// router.get('/update:id',
-// body('title').optional(),
-// body('body').optional(),
-// body('status').isIn(['IN_PROGRESS','SHIPED','DEPERCATED']),
-// body('version').optional(),
-//     ()=>{
-
-// })
-
-// router.post('/update',
-// body('title').exists().isString(),
-// body('body').exists().isString(),
-// ()=>{
-
-// })
+})
 // router.put('/update:id',()=>{
 
 // })

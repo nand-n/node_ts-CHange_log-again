@@ -27,15 +27,19 @@ export const createUpdate = async(req,res)=>{
 
     const product = await prisma.product.findUnique({
         where:{
-            id:req.body.id
+            id:req.body.productId
         }
     })
     if(!product){
         //does not belong to the user 
-        return res.json({message:'nope'})
+        return res.json({message:'nope error error'})
     }
     const update = await prisma.update.create({
-        data:res.body
+        data:{
+            title:req.body.title,
+            body:req.body.body,
+            product:{connect:{id:product.id ,}}
+        }
     })
     res.json({data:update})
 }

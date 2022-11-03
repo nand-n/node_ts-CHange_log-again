@@ -2,6 +2,7 @@ import {Router} from 'express';
 import { body,oneOf,validationResult } from 'express-validator';
 import prisma from './db';
 import { createProduct, deleteProduct, getOneProduct, getProducts } from './handlers/product';
+import { createUpdate, deleteUpdate, getOneUpdate, getUpdate, updateUpdate } from './handlers/update';
 import { handleInputErrors } from './modules/middleware';
 
 const router = Router();
@@ -20,30 +21,25 @@ router.post('/product/:id',(req,res)=>{})
 router.delete('/product/:id',deleteProduct)
 
 // Update 
-router.get('/update',(req,res) =>{
+router.get('/update',getUpdate)
+router.get('/update/:id',getOneUpdate)
 
-})
-router.get('/update:id',
+router.put('/update/:id',
 body('title').optional(),
 body('body').optional(),
 body('status').isIn(['IN_PROGRESS','SHIPED','DEPERCATED']),
 body('version').optional(),
-    ()=>{
-
-})
+updateUpdate
+)
 
 router.post('/update',
 body('title').exists().isString(),
 body('body').exists().isString(),
-()=>{
+body('productId').exists().isString(),
+createUpdate
+)
 
-})
-// router.put('/update:id',()=>{
-
-// })
-// router.delete('/update:id',()=>{
-
-// })
+router.delete('/update:id',deleteUpdate)
 
 // //Update Point
 // router.get('/updatepoint',(req,res) =>{
@@ -68,5 +64,10 @@ body('body').exists().isString(),
 // router.delete('/updatepoint:id',()=>{
 
 // })
+router.use((err,req,res,next)=>{
+    console.error(err);
+    res.json({message:'in route hander '})
+    
+})
 
 export default router;
